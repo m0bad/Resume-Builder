@@ -26,45 +26,36 @@ export function ResumeBuilder() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <div className="w-1/2 p-4 space-y-4 overflow-y-auto">
-        <PersonalDetailsForm
-          initialData={data.personalDetails}
-          updateData={(newData: ResumeData["personalDetails"]) =>
-            updateData("personalDetails", newData)
-          }
-        />
-        <TechnicalSkillsForm
-          initialData={data.technicalSkills}
-          updateData={(newData: ResumeData["technicalSkills"]) =>
-            updateData("technicalSkills", newData)
-          }
-        />
-        <EmploymentHistoryForm
-          initialData={data.employments}
-          updateData={(newData: ResumeData["employments"]) =>
-            updateData("employments", newData)
-          }
-        />
-        <EducationForm
-          initialData={data.educations}
-          updateData={(newData: ResumeData["educations"]) =>
-            updateData("educations", newData)
-          }
-        />
-        <CertificatesForm
-          initialData={data.certificates}
-          updateData={(newData: ResumeData["certificates"]) =>
-            updateData("certificates", newData)
-          }
-        />
-        <LanguagesForm
-          initialData={data.languages}
-          updateData={(newData: ResumeData["languages"]) =>
-            updateData("languages", newData)
-          }
-        />
+      <div className="w-1/2 p-4 overflow-y-auto">
+        <div className="space-y-4">
+          <PersonalDetailsForm
+            initialData={data.personalDetails}
+            updateData={(newData) => updateData("personalDetails", newData)}
+          />
+          <TechnicalSkillsForm
+            initialData={data.technicalSkills}
+            updateData={(newData) => updateData("technicalSkills", newData)}
+          />
+          <EmploymentHistoryForm
+            initialData={data.employments}
+            updateData={(newData) => updateData("employments", newData)}
+          />
+          <EducationForm
+            initialData={data.educations}
+            updateData={(newData) => updateData("educations", newData)}
+          />
+          <CertificatesForm
+            initialData={data.certificates}
+            updateData={(newData) => updateData("certificates", newData)}
+          />
+          <LanguagesForm
+            initialData={data.languages}
+            updateData={(newData) => updateData("languages", newData)}
+          />
+        </div>
       </div>
-      <div className="w-1/2 p-4">
+
+      <div className="w-1/2 p-4 sticky top-0 h-screen overflow-y-auto">
         <ResumePreview data={data} />
       </div>
     </div>

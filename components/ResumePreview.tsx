@@ -6,7 +6,7 @@ import { Badge } from "./ui/badge";
 
 export function ResumePreview({ data }: { data: ResumeData }) {
   return (
-    <Card className="overflow-auto">
+    <Card className="h-full overflow-auto">
       <CardContent className="p-6">
         <div className="mb-6">
           <h1 className="text-4xl font-bold">{data.personalDetails.name}</h1>
