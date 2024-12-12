@@ -24,6 +24,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 import { Language } from "@/lib/types";
 import { ResumeData } from "@/lib/types";
+import { Trash2 } from "lucide-react";
 
 const languageSchema = z.object({
   name: z
@@ -36,12 +37,13 @@ const formSchema = z.object({
   languages: z.array(languageSchema),
 });
 
-interface LanguagesFormProps {
+export function LanguagesForm({
+  initialData,
+  updateData,
+}: {
   initialData: ResumeData["languages"];
   updateData: (values: ResumeData["languages"]) => void;
-}
-
-export function LanguagesForm({ initialData, updateData }: LanguagesFormProps) {
+}) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { languages: initialData },
@@ -52,6 +54,12 @@ export function LanguagesForm({ initialData, updateData }: LanguagesFormProps) {
     control: form.control,
     name: "languages",
   });
+
+  const handleRemove = (index: number) => {
+    remove(index);
+    const currentLanguages = form.getValues("languages");
+    updateData(currentLanguages);
+  };
 
   useEffect(() => {
     form.watch((value) => {
@@ -70,13 +78,24 @@ export function LanguagesForm({ initialData, updateData }: LanguagesFormProps) {
         <Form {...form}>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="flex items-end space-x-2">
+              <div key={field.id} className="space-y-4 p-4 border rounded-lg">
                 <FormField
                   control={form.control}
                   name={`languages.${index}.name`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Language</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Language</FormLabel>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleRemove(index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -91,7 +110,11 @@ export function LanguagesForm({ initialData, updateData }: LanguagesFormProps) {
                     <FormItem>
                       <FormLabel>Proficiency</FormLabel>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          const currentLanguages = form.getValues("languages");
+                          updateData(currentLanguages);
+                        }}
                         defaultValue={field.value}
                       >
                         <FormControl>
@@ -112,22 +135,15 @@ export function LanguagesForm({ initialData, updateData }: LanguagesFormProps) {
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => remove(index)}
-                >
-                  Remove
-                </Button>
               </div>
             ))}
             <Button
               type="button"
+              variant="outline"
               onClick={() => append({ name: "", proficiency: "Basic" })}
             >
               Add Language
             </Button>
-            <Button type="submit">Save Languages</Button>
           </div>
         </Form>
       </CardContent>
