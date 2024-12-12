@@ -6,8 +6,8 @@ import { Badge } from "./ui/badge";
 
 export function ResumePreview({ data }: { data: ResumeData }) {
   return (
-    <Card className="h-full overflow-auto max-w-4xl mx-auto">
-      <CardContent className="p-8">
+    <Card className="h-full overflow-auto max-w-5xl mx-auto">
+      <CardContent className="p-6">
         <div className="mb-8">
           <h1 className="text-4xl font-bold">{data.personalDetails.name}</h1>
           <h2 className="text-xl text-gray-600">
@@ -15,8 +15,8 @@ export function ResumePreview({ data }: { data: ResumeData }) {
           </h2>
         </div>
 
-        <div className="grid grid-cols-4 gap-8">
-          <div className="col-span-3">
+        <div className="grid grid-cols-3 gap-8">
+          <div className="col-span-2">
             <section className="mb-8">
               <h3 className="text-2xl font-semibold mb-3">About Me</h3>
               <div
@@ -58,20 +58,21 @@ export function ResumePreview({ data }: { data: ResumeData }) {
             </section>
           </div>
 
-          <div>
-            <section className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">Contact</h3>
-              <div className="space-y-2">
+          <div className="space-y-6">
+            <section className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Contact</h3>
+              <div className="space-y-3">
                 <p className="flex items-center">
-                  <MapPin className="mr-2 h-4 w-4" />{" "}
+                  <MapPin className="mr-3 h-4 w-4" />
                   {data.personalDetails.city}, {data.personalDetails.country}
                 </p>
                 <p className="flex items-center">
-                  <Phone className="mr-2 h-4 w-4" />{" "}
+                  <Phone className="mr-3 h-4 w-4" />
                   {data.personalDetails.phone}
                 </p>
                 <p className="flex items-center">
-                  <Mail className="mr-2 h-4 w-4" /> {data.personalDetails.email}
+                  <Mail className="mr-3 h-4 w-4" />
+                  {data.personalDetails.email}
                 </p>
               </div>
             </section>
