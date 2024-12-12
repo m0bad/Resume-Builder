@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 import { Education, ResumeData } from "@/lib/types";
+import { Trash2 } from "lucide-react";
 
 const educationSchema = z.object({
   schoolName: z
@@ -61,6 +62,28 @@ export function EducationForm({ initialData, updateData }: EducationFormProps) {
     name: "educations",
   });
 
+  const handleRemove = (index: number) => {
+    remove(index);
+    const currentEducations = form.getValues("educations");
+    updateData(currentEducations);
+  };
+
+  const handleYearChange = (
+    index: number,
+    field: { onChange: (value: number) => void },
+    value: string,
+    fieldName: "startYear" | "endYear"
+  ) => {
+    const yearValue = parseInt(value, 10);
+    field.onChange(yearValue);
+
+    // Get current values and update parent
+    const currentEducations = form.getValues("educations");
+    // Ensure the specific year field is updated in the current values
+    currentEducations[index][fieldName] = yearValue;
+    updateData(currentEducations);
+  };
+
   useEffect(() => {
     form.watch((value) => {
       if (form.formState.isValid) {
@@ -78,13 +101,24 @@ export function EducationForm({ initialData, updateData }: EducationFormProps) {
         <Form {...form}>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="space-y-4 p-4 border rounded">
+              <div key={field.id} className="space-y-4 p-4 border rounded-lg">
                 <FormField
                   control={form.control}
                   name={`educations.${index}.schoolName`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>School Name</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>School Name</FormLabel>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleRemove(index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -116,7 +150,12 @@ export function EducationForm({ initialData, updateData }: EducationFormProps) {
                           type="number"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10))
+                            handleYearChange(
+                              index,
+                              field,
+                              e.target.value,
+                              "startYear"
+                            )
                           }
                         />
                       </FormControl>
@@ -135,7 +174,12 @@ export function EducationForm({ initialData, updateData }: EducationFormProps) {
                           type="number"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10))
+                            handleYearChange(
+                              index,
+                              field,
+                              e.target.value,
+                              "endYear"
+                            )
                           }
                         />
                       </FormControl>
@@ -143,17 +187,11 @@ export function EducationForm({ initialData, updateData }: EducationFormProps) {
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => remove(index)}
-                >
-                  Remove Education
-                </Button>
               </div>
             ))}
             <Button
               type="button"
+              variant="outline"
               onClick={() =>
                 append({
                   schoolName: "",
@@ -165,7 +203,6 @@ export function EducationForm({ initialData, updateData }: EducationFormProps) {
             >
               Add Education
             </Button>
-            <Button type="submit">Save Education</Button>
           </div>
         </Form>
       </CardContent>
