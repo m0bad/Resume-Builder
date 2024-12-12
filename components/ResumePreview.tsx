@@ -19,7 +19,11 @@ export function ResumePreview({ data }: { data: ResumeData }) {
           <div className="col-span-2">
             <section className="mb-6">
               <h3 className="text-xl font-semibold mb-2">About Me</h3>
-              <p>{data.personalDetails.summary}</p>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: data.personalDetails.summary,
+                }}
+              />
             </section>
 
             <section className="mb-6">

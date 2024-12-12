@@ -13,12 +13,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 import { Employment } from "@/lib/types";
 import { ResumeData } from "@/lib/types";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 const jobSchema = z.object({
   jobTitle: z
@@ -162,7 +162,11 @@ export function EmploymentHistoryForm({
                     <FormItem>
                       <FormLabel>Job Description</FormLabel>
                       <FormControl>
-                        <Textarea {...field} />
+                        <RichTextEditor
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Describe your role and achievements"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

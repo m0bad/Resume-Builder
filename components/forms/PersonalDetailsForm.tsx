@@ -12,10 +12,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResumeData } from "@/lib/types";
 import { useEffect } from "react";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -167,10 +167,10 @@ export function PersonalDetailsForm({
                 <FormItem>
                   <FormLabel>Summary</FormLabel>
                   <FormControl>
-                    <Textarea
+                    <RichTextEditor
+                      value={field.value}
+                      onChange={field.onChange}
                       placeholder="Brief description of your professional background and goals"
-                      rows={10}
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
