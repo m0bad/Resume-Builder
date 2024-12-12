@@ -28,12 +28,7 @@ Passionate about mentoring developers and implementing best practices for code q
       companyName: "TechCorp Inc",
       startDate: "2020-06-01",
       currentlyEmployed: true,
-      description: `<p>
-• Led and mentored a team of 6 frontend engineers, implementing agile methodologies and improving team velocity by 40%
-• Architected and developed a modern SaaS platform using React, TypeScript, and GraphQL, serving 100k+ monthly active users
-• Implemented comprehensive component library and design system, reducing development time by 60%
-• Optimized application performance, achieving 30% improvement in load times and 95+ Lighthouse scores
-• Established frontend testing practices, achieving 85% code coverage using Jest and React Testing Library</p>`,
+      description: `<ul class="list-disc ml-4"><li><p>Led and mentored a team of 6 frontend engineers, implementing agile methodologies and improving team velocity by 40%</p></li><li><p>Architected and developed a modern SaaS platform using React, TypeScript, and GraphQL, serving 100k+ monthly active users</p></li><li><p>Implemented comprehensive component library and design system, reducing development time by 60%</p></li><li><p>Optimized application performance, achieving 30% improvement in load times and 95+ Lighthouse scores</p></li></ul>`,
     },
     {
       jobTitle: "Frontend Engineer",
@@ -41,12 +36,7 @@ Passionate about mentoring developers and implementing best practices for code q
       startDate: "2018-01-01",
       endDate: "2020-05-31",
       currentlyEmployed: false,
-      description: `<p>
-• Developed and maintained responsive web applications using React, Redux, and TypeScript
-• Improved web accessibility compliance to WCAG 2.1 AA standards, increasing accessibility score by 45%
-• Reduced bundle size by 35% through code splitting and lazy loading implementation
-• Collaborated with UX team to implement new design system, improving consistency across products
-• Built reusable component library used across 3 different product lines</p>`,
+      description: `<ul class="list-disc ml-4"><li><p>Led and mentored a team of 6 frontend engineers, implementing agile methodologies and improving team velocity by 40%</p></li><li><p>Architected and developed a modern SaaS platform using React, TypeScript, and GraphQL, serving 100k+ monthly active users</p></li><li><p>Implemented comprehensive component library and design system, reducing development time by 60%</p></li><li><p>Optimized application performance, achieving 30% improvement in load times and 95+ Lighthouse scores</p></li></ul>`,
     },
   ],
   educations: [
