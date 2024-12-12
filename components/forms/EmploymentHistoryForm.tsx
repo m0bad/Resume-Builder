@@ -60,7 +60,9 @@ export function EmploymentHistoryForm({
 }: EmploymentHistoryFormProps) {
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { employments: initialData },
+    defaultValues: {
+      employments: initialData,
+    },
     mode: "onChange",
   });
 
@@ -68,6 +70,19 @@ export function EmploymentHistoryForm({
     control: form.control,
     name: "employments",
   });
+
+  const handleCurrentlyEmployedChange = (index: number, checked: boolean) => {
+    // If unchecking "Currently Employed", set end date to today
+    if (!checked) {
+      const today = new Date().toISOString().split("T")[0];
+      form.setValue(`employments.${index}.endDate`, today);
+    }
+    form.setValue(`employments.${index}.currentlyEmployed`, checked);
+
+    // Get current values and update parent
+    const currentEmployments = form.getValues("employments");
+    updateData(currentEmployments);
+  };
 
   const handleRemove = (index: number) => {
     remove(index);
@@ -151,7 +166,12 @@ export function EmploymentHistoryForm({
                       <FormControl>
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) =>
+                            handleCurrentlyEmployedChange(
+                              index,
+                              checked as boolean
+                            )
+                          }
                         />
                       </FormControl>
                       <FormLabel>Currently Employed</FormLabel>
