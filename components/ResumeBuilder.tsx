@@ -14,7 +14,10 @@ import { ResumeData } from "@/lib/types";
 export function ResumeBuilder() {
   const [data, setData] = useState<ResumeData>(resumeData);
 
-  const updateData = (section: keyof ResumeData, newData: any) => {
+  const updateData = <T extends keyof ResumeData>(
+    section: T,
+    newData: ResumeData[T]
+  ) => {
     setData((prevData) => ({
       ...prevData,
       [section]: newData,
@@ -26,27 +29,39 @@ export function ResumeBuilder() {
       <div className="w-1/2 p-4 space-y-4 overflow-y-auto">
         <PersonalDetailsForm
           initialData={data.personalDetails}
-          updateData={(newData) => updateData("personalDetails", newData)}
+          updateData={(newData: ResumeData["personalDetails"]) =>
+            updateData("personalDetails", newData)
+          }
         />
         <TechnicalSkillsForm
           initialData={data.technicalSkills}
-          updateData={(newData) => updateData("technicalSkills", newData)}
+          updateData={(newData: ResumeData["technicalSkills"]) =>
+            updateData("technicalSkills", newData)
+          }
         />
         <EmploymentHistoryForm
           initialData={data.employments}
-          updateData={(newData) => updateData("employments", newData)}
+          updateData={(newData: ResumeData["employments"]) =>
+            updateData("employments", newData)
+          }
         />
         <EducationForm
           initialData={data.educations}
-          updateData={(newData) => updateData("educations", newData)}
+          updateData={(newData: ResumeData["educations"]) =>
+            updateData("educations", newData)
+          }
         />
         <CertificatesForm
           initialData={data.certificates}
-          updateData={(newData) => updateData("certificates", newData)}
+          updateData={(newData: ResumeData["certificates"]) =>
+            updateData("certificates", newData)
+          }
         />
         <LanguagesForm
           initialData={data.languages}
-          updateData={(newData) => updateData("languages", newData)}
+          updateData={(newData: ResumeData["languages"]) =>
+            updateData("languages", newData)
+          }
         />
       </div>
       <div className="w-1/2 p-4">
