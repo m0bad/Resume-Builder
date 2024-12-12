@@ -68,6 +68,12 @@ export function EmploymentHistoryForm({
     name: "employments",
   });
 
+  const handleRemove = (index: number) => {
+    remove(index);
+    const currentEmployments = form.getValues("employments");
+    updateData(currentEmployments);
+  };
+
   useEffect(() => {
     form.watch((value) => {
       if (form.formState.isValid) {
@@ -175,7 +181,7 @@ export function EmploymentHistoryForm({
                 <Button
                   type="button"
                   variant="destructive"
-                  onClick={() => remove(index)}
+                  onClick={() => handleRemove(index)}
                 >
                   Remove Job
                 </Button>
@@ -196,7 +202,6 @@ export function EmploymentHistoryForm({
             >
               Add Job
             </Button>
-            <Button type="submit">Save Employment History</Button>
           </div>
         </Form>
       </CardContent>
