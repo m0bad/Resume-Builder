@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { Employment } from "@/lib/types";
 import { ResumeData } from "@/lib/types";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { Trash2 } from "lucide-react";
 
 const jobSchema = z.object({
   jobTitle: z
@@ -91,13 +92,24 @@ export function EmploymentHistoryForm({
         <Form {...form}>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="space-y-4 p-4 border rounded">
+              <div key={field.id} className="space-y-4 p-4 border rounded-lg">
                 <FormField
                   control={form.control}
                   name={`employments.${index}.jobTitle`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Job Title</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Job Title</FormLabel>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleRemove(index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -178,17 +190,11 @@ export function EmploymentHistoryForm({
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => handleRemove(index)}
-                >
-                  Remove Job
-                </Button>
               </div>
             ))}
             <Button
               type="button"
+              variant="outline"
               onClick={() =>
                 append({
                   jobTitle: "",
