@@ -18,18 +18,15 @@ export function ResumeBuilder() {
     section: T,
     newData: ResumeData[T]
   ) => {
-    setData((prevData) => {
-      const newState = {
-        ...prevData,
-        [section]: newData,
-      };
-      return newState;
-    });
+    setData((prevData) => ({
+      ...prevData,
+      [section]: newData,
+    }));
   };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <div className="w-1/2 p-4 overflow-y-auto">
+      <div className="w-[40%] p-4 overflow-y-auto">
         <div className="space-y-4">
           <PersonalDetailsForm
             initialData={data.personalDetails}
@@ -58,7 +55,7 @@ export function ResumeBuilder() {
         </div>
       </div>
 
-      <div className="w-1/2 p-4 sticky top-0 h-screen overflow-y-auto">
+      <div className="w-[60%] p-4 sticky top-0 h-screen overflow-y-auto">
         <ResumePreview data={data} />
       </div>
     </div>

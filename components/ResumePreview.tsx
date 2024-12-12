@@ -6,20 +6,21 @@ import { Badge } from "./ui/badge";
 
 export function ResumePreview({ data }: { data: ResumeData }) {
   return (
-    <Card className="h-full overflow-auto">
-      <CardContent className="p-6">
-        <div className="mb-6">
+    <Card className="h-full overflow-auto max-w-4xl mx-auto">
+      <CardContent className="p-8">
+        <div className="mb-8">
           <h1 className="text-4xl font-bold">{data.personalDetails.name}</h1>
           <h2 className="text-xl text-gray-600">
             {data.personalDetails.jobTitle}
           </h2>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
-          <div className="col-span-2">
-            <section className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">About Me</h3>
+        <div className="grid grid-cols-4 gap-8">
+          <div className="col-span-3">
+            <section className="mb-8">
+              <h3 className="text-2xl font-semibold mb-3">About Me</h3>
               <div
+                className="text-base leading-relaxed"
                 dangerouslySetInnerHTML={{
                   __html: data.personalDetails.summary,
                 }}
