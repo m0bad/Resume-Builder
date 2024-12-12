@@ -1,42 +1,80 @@
-"use client"
+"use client";
 
-import { useFieldArray, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useFieldArray, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
+import { Employment } from "@/lib/types";
+import { ResumeData } from "@/lib/types";
 
 const jobSchema = z.object({
-  jobTitle: z.string().min(2, { message: "Job title must be at least 2 characters." }),
-  companyName: z.string().min(2, { message: "Company name must be at least 2 characters." }),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Invalid date format. Use YYYY-MM-DD." }),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Invalid date format. Use YYYY-MM-DD." }).optional(),
+  jobTitle: z
+    .string()
+    .min(2, { message: "Job title must be at least 2 characters." }),
+  companyName: z
+    .string()
+    .min(2, { message: "Company name must be at least 2 characters." }),
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+    message: "Invalid date format. Use YYYY-MM-DD.",
+  }),
+  endDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Invalid date format. Use YYYY-MM-DD.",
+    })
+    .optional(),
   currentlyEmployed: z.boolean(),
-  description: z.string().min(10, { message: "Description must be at least 10 characters." }),
-})
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters." }),
+});
 
 const formSchema = z.object({
-  employments: z.array(jobSchema).min(1, { message: "At least one employment entry is required." })
-})
+  employments: z
+    .array(jobSchema)
+    .min(1, { message: "At least one employment entry is required." }),
+});
 
-export function EmploymentHistoryForm({ initialData, updateData }) {
+interface EmploymentHistoryFormProps {
+  initialData: ResumeData["employments"];
+  updateData: (values: ResumeData["employments"]) => void;
+}
+
+export function EmploymentHistoryForm({
+  initialData,
+  updateData,
+}: EmploymentHistoryFormProps) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { employments: initialData },
-  })
+    mode: "onChange",
+  });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "employments",
-  })
+  });
 
-  function onSubmit(values) {
-    updateData(values.employments)
-  }
+  useEffect(() => {
+    form.watch((value) => {
+      if (form.formState.isValid) {
+        updateData(value.employments as Employment[]);
+      }
+    });
+  }, [form, updateData]);
 
   return (
     <Card>
@@ -45,7 +83,7 @@ export function EmploymentHistoryForm({ initialData, updateData }) {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-4">
             {fields.map((field, index) => (
               <div key={field.id} className="space-y-4 p-4 border rounded">
                 <FormField
@@ -130,15 +168,34 @@ export function EmploymentHistoryForm({ initialData, updateData }) {
                     </FormItem>
                   )}
                 />
-                <Button type="button" variant="destructive" onClick={() => remove(index)}>Remove Job</Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => remove(index)}
+                >
+                  Remove Job
+                </Button>
               </div>
             ))}
-            <Button type="button" onClick={() => append({ jobTitle: '', companyName: '', startDate: '', endDate: '', currentlyEmployed: false, description: '' })}>Add Job</Button>
+            <Button
+              type="button"
+              onClick={() =>
+                append({
+                  jobTitle: "",
+                  companyName: "",
+                  startDate: "",
+                  endDate: "",
+                  currentlyEmployed: false,
+                  description: "",
+                })
+              }
+            >
+              Add Job
+            </Button>
             <Button type="submit">Save Employment History</Button>
-          </form>
+          </div>
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

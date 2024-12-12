@@ -15,7 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { useEffect } from "react";
+import { ResumeData, Certificate } from "@/lib/types";
 const certificateSchema = z.object({
   name: z
     .string()
@@ -39,10 +40,19 @@ const formSchema = z.object({
   certificates: z.array(certificateSchema),
 });
 
-export function CertificatesForm({ initialData, updateData }) {
+interface CertificatesFormProps {
+  initialData: ResumeData["certificates"];
+  updateData: (values: ResumeData["certificates"]) => void;
+}
+
+export function CertificatesForm({
+  initialData,
+  updateData,
+}: CertificatesFormProps) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { certificates: initialData },
+    mode: "onChange",
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -50,9 +60,13 @@ export function CertificatesForm({ initialData, updateData }) {
     name: "certificates",
   });
 
-  function onSubmit(values) {
-    updateData(values.certificates);
-  }
+  useEffect(() => {
+    form.watch((value) => {
+      if (form.formState.isValid) {
+        updateData(value.certificates as Certificate[]);
+      }
+    });
+  }, [form, updateData]);
 
   return (
     <Card>
@@ -61,7 +75,7 @@ export function CertificatesForm({ initialData, updateData }) {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-4">
             {fields.map((field, index) => (
               <div key={field.id} className="space-y-4 p-4 border rounded">
                 <FormField
@@ -151,7 +165,7 @@ export function CertificatesForm({ initialData, updateData }) {
               Add Certificate
             </Button>
             <Button type="submit">Save Certificates</Button>
-          </form>
+          </div>
         </Form>
       </CardContent>
     </Card>

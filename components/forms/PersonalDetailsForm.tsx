@@ -1,34 +1,65 @@
-"use client"
+"use client";
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ResumeData } from "@/lib/types";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
-  phone: z.string().min(10, { message: "Phone number must be at least 10 digits." }),
-  country: z.string().min(2, { message: "Country must be at least 2 characters." }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must be at least 10 digits." }),
+  country: z
+    .string()
+    .min(2, { message: "Country must be at least 2 characters." }),
   city: z.string().min(2, { message: "City must be at least 2 characters." }),
-  address: z.string().min(5, { message: "Address must be at least 5 characters." }),
-  jobTitle: z.string().min(2, { message: "Job title must be at least 2 characters." }),
-  summary: z.string().min(10, { message: "Summary must be at least 10 characters." }),
-})
+  address: z
+    .string()
+    .min(5, { message: "Address must be at least 5 characters." }),
+  jobTitle: z
+    .string()
+    .min(2, { message: "Job title must be at least 2 characters." }),
+  summary: z
+    .string()
+    .min(10, { message: "Summary must be at least 10 characters." }),
+});
 
-export function PersonalDetailsForm({ initialData, updateData }) {
+interface PersonalDetailsFormProps {
+  initialData: ResumeData["personalDetails"];
+  updateData: (values: ResumeData["personalDetails"]) => void;
+}
+
+export function PersonalDetailsForm({
+  initialData,
+  updateData,
+}: PersonalDetailsFormProps) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
-  })
+    mode: "onChange",
+  });
 
-  function onSubmit(values) {
-    updateData(values)
-  }
+  useEffect(() => {
+    form.watch((value) => {
+      if (form.formState.isValid) {
+        updateData(value as ResumeData["personalDetails"]);
+      }
+    });
+  }, [form, updateData]);
 
   return (
     <Card>
@@ -37,7 +68,7 @@ export function PersonalDetailsForm({ initialData, updateData }) {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -136,17 +167,19 @@ export function PersonalDetailsForm({ initialData, updateData }) {
                 <FormItem>
                   <FormLabel>Summary</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Brief description of your professional background and goals" {...field} />
+                    <Textarea
+                      placeholder="Brief description of your professional background and goals"
+                      rows={10}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Save Personal Details</Button>
-          </form>
+          </div>
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-
