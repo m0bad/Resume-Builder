@@ -59,6 +59,12 @@ export function TechnicalSkillsForm({
     name: "skills",
   });
 
+  const handleRemove = (index: number) => {
+    remove(index);
+    const currentSkills = form.getValues("skills");
+    updateData(currentSkills);
+  };
+
   useEffect(() => {
     form.watch((value) => {
       if (form.formState.isValid) {
@@ -126,7 +132,7 @@ export function TechnicalSkillsForm({
                   variant="ghost"
                   size="icon"
                   className="h-10 w-10 text-muted-foreground hover:text-destructive"
-                  onClick={() => remove(index)}
+                  onClick={() => handleRemove(index)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

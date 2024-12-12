@@ -18,10 +18,13 @@ export function ResumeBuilder() {
     section: T,
     newData: ResumeData[T]
   ) => {
-    setData((prevData) => ({
-      ...prevData,
-      [section]: newData,
-    }));
+    setData((prevData) => {
+      const newState = {
+        ...prevData,
+        [section]: newData,
+      };
+      return newState;
+    });
   };
 
   return (
