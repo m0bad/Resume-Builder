@@ -17,6 +17,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 import { ResumeData, Certificate } from "@/lib/types";
+import { Trash2 } from "lucide-react";
+
 const certificateSchema = z.object({
   name: z
     .string()
@@ -40,15 +42,13 @@ const formSchema = z.object({
   certificates: z.array(certificateSchema),
 });
 
-interface CertificatesFormProps {
-  initialData: ResumeData["certificates"];
-  updateData: (values: ResumeData["certificates"]) => void;
-}
-
 export function CertificatesForm({
   initialData,
   updateData,
-}: CertificatesFormProps) {
+}: {
+  initialData: ResumeData["certificates"];
+  updateData: (values: ResumeData["certificates"]) => void;
+}) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { certificates: initialData },
@@ -59,6 +59,26 @@ export function CertificatesForm({
     control: form.control,
     name: "certificates",
   });
+
+  const handleRemove = (index: number) => {
+    remove(index);
+    const currentCertificates = form.getValues("certificates");
+    updateData(currentCertificates);
+  };
+
+  const handleNumberChange = (
+    index: number,
+    field: { onChange: (value: number) => void },
+    value: string,
+    fieldName: "month" | "year"
+  ) => {
+    const numValue = parseInt(value, 10);
+    field.onChange(numValue);
+
+    const currentCertificates = form.getValues("certificates");
+    currentCertificates[index][fieldName] = numValue;
+    updateData(currentCertificates);
+  };
 
   useEffect(() => {
     form.watch((value) => {
@@ -77,13 +97,24 @@ export function CertificatesForm({
         <Form {...form}>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="space-y-4 p-4 border rounded">
+              <div key={field.id} className="space-y-4 p-4 border rounded-lg">
                 <FormField
                   control={form.control}
                   name={`certificates.${index}.name`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Certificate Name</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Certificate Name</FormLabel>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleRemove(index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -102,7 +133,12 @@ export function CertificatesForm({
                           type="number"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10))
+                            handleNumberChange(
+                              index,
+                              field,
+                              e.target.value,
+                              "month"
+                            )
                           }
                         />
                       </FormControl>
@@ -121,7 +157,12 @@ export function CertificatesForm({
                           type="number"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10))
+                            handleNumberChange(
+                              index,
+                              field,
+                              e.target.value,
+                              "year"
+                            )
                           }
                         />
                       </FormControl>
@@ -142,17 +183,11 @@ export function CertificatesForm({
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => remove(index)}
-                >
-                  Remove Certificate
-                </Button>
               </div>
             ))}
             <Button
               type="button"
+              variant="outline"
               onClick={() =>
                 append({
                   name: "",
@@ -164,7 +199,6 @@ export function CertificatesForm({
             >
               Add Certificate
             </Button>
-            <Button type="submit">Save Certificates</Button>
           </div>
         </Form>
       </CardContent>
